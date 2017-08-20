@@ -34,8 +34,16 @@ def f(n):
     def pmtx(m):
         print '\n', '-'*8, '\n'
         for i in range(0,len(m)):
-            print ' '.join(map('{}'.format, m[i]))
+            print  ' '.join(map('{}'.format, m[i]))
         print '\n', '-'*8, '\n'
+
+    def sortM(m):
+        l=([(i, sum(m[i])) for i in range(len(m))])
+        l.sort(lambda a, b: a[1]-b[1])
+        print l
+        k=dict([((x,y), m[y][x]) for x in range(0, len(m)) for y in range(0, len(m))])
+        mm=[[k[(l[i][0],l[j][0])] for i in range(0, len(m)) ]  for j in range(0, len(m)) ]
+        return mm
         
     def sampleMtx(n):
         from random import random
@@ -48,7 +56,7 @@ def f(n):
 
                 
         pmtx(m)
-        m.sort(lambda x, y: sum(x)-sum(y))
+        m=sortM(m)
         pmtx(m)
 
         
