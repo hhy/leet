@@ -377,8 +377,7 @@ def f(banana_list, r1=0.5):
 
     
     def willEq(a, b, x,y): # x<y
-        if a>b:
-            a,b=b, a
+
         if a==x and y==b:
             return True
         
@@ -392,7 +391,7 @@ def f(banana_list, r1=0.5):
                 return True
         return False
 
-    def everPlaying(x, y):
+    def everPlaying_(x, y):
         if x==y:
             return False
         if (x+y)%4!=0:
@@ -403,6 +402,38 @@ def f(banana_list, r1=0.5):
         m=not willEq(n, n*3, x,y)
         return m
 
+    def _everPlayingP(a, b, kmax, k=0, hit=[]):
+        if a==b:
+            return False
+        if k>kmax or (a,b) in hit:
+            return True
+        while (a%2==0) and (b%2==0):
+            a, b=a/2, b/2
+            
+        hit.append((a,b))
+        if a>b:
+            a,b =b, a
+        k+=1
+        _everPlayingP(a*2, b-a, kmax, k, hit) 
+
+    def everPlaying(a, b):
+        s=a+b
+        if s%4!=0:
+            return True
+        k=0;
+        while True:
+            if s%2!=0:
+                break
+            s=s/2
+            k+=1
+        return _everPlayingP(a, b, k)
+        
+    def pmtx(m):
+        print '\n', '-'*8, '\n'
+        for i in range(0,len(m)):
+            print  ' '.join(map('{}'.format, m[i]))
+        print '\n', '-'*8, '\n'
+
 
     def getG(l):
         ll=len(l)
@@ -411,7 +442,9 @@ def f(banana_list, r1=0.5):
         for i in range(0, ll):
             for j in range(0, ll):
                 if i>j:
+                    #m[i][j]=1 if everPlaying(l[i], l[j]) else 0
                     m[i][j]=1 if everPlaying(l[i], l[j]) else 0
+        #print( '-get g')                    
         for i in range(0, ll):
             for j in range(0, ll):
                 if i<j:
@@ -427,23 +460,25 @@ def f(banana_list, r1=0.5):
                     g[i]=v
             return g
         g=getG(m)
-        
+        pmtx(m)
+        print (g)
         return g
 
+    
+    
+    print ('*'*19, 'orignal')
+    print( banana_list)
+    print ('*'*19, 'orignal')
     g=getG(banana_list)
-    print( '-get g')
     ma=matching(g)
-    return (len(banana_list)-len(ma))
-    #print(ma)
+    print(ma)
+    print ('*'*19, 'end')
+    return (len(banana_list)-len(ma)*2)
+
     
 
 
 
-def sampleL():
-    l= [251197268, 183484132, 48602364, 356474762, 191355094, 473650346, 26094582, 311199766, 8861370, 85623292, 315121000, 166652330, 144221266, 491581978, 89979614, 143840856, 173618806, 296605370, 489789928, 317945500, 462991666, 137324030, 393648544, 448830126, 288767058, 64038870, 159506762, 346469472, 367727272, 136669108, 352278138, 377075916, 280565644, 491291128, 281429200, 369294488, 242026476, 55165944, 507789346, 142407112, 12596134, 41528644, 332142840, 135272620, 478469802, 498229950, 505846240, 337154826, 179298232, 348669670, 182078818, 423828214, 194371732, 88406246, 367815170, 51495244, 296304426, 181372414, 157416724, 305228090, 27381330, 480482976, 126054186, 20664156, 139240476, 207348722, 496933806, 338171690, 373909022, 167249548, 400129804, 287082378, 368308936, 479315364, 111510344, 37591644, 384493118, 16568742, 156145996, 447027972, 120704972, 500258172, 165090116, 197485814, 121760192, 326978262, 476444822, 13428252, 301608796, 453780878, 147408198, 265124474, 478738832, 401537282, 16818836, 446339358, 398013950, 340364536, 111795132, 83965168, 469567762, 195742976, 427639170, 267165226, 347506082, 366772712, 148873710, 194360410, 145398380, 424423634, 339637362, 183998936, 209116020, 66471222, 332525976, 444049778, 442128536, 64579104, 7739494, 303567910, 333159028, 38131512, 311719644, 235095812, 135826218, 147434474, 225336444, 224836984, 226687118, 90665400, 209654436, 501973444, 528622086, 292282014, 69991698, 130841926, 536214878, 137187084, 153852552, 231991292, 384724886, 126141160, 206083892, 282697730, 520346020, 339579036, 160764066, 134797910, 259084734, 333749716, 75795414]
-    #l=[1,1]
-    #l=[1,7,3,21,13,19]
-    return l
 
 def test():
     ls=[]
@@ -455,8 +490,14 @@ def test():
                 ls.append(l)
     #print('\n'.join(ls))
     ll=[ list(map(int, ls[i].split(', '))) for i in range(0, len(ls))]
-    for i in range(0, len(ll)):
+    ll.insert(0, [1,1])
+    ll.insert(0,[1,7,3,21,13,19])
+    
+    
+    #for i in range(0, len(ll)):
+    for i in range(0, 1):
         le=f(ll[i])
+
         print(le)
     #return ll
     
